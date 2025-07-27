@@ -5,7 +5,8 @@ cv2.namedWindow("Building7_1", cv2.WINDOW_NORMAL)
 cv2.namedWindow("Building7_2", cv2.WINDOW_NORMAL)
 cv2.imshow("Building7_1", img)
 
-
+# 在圖片的右下角添加一個白色方塊
+# 這個方塊的大小為50x50像素
 pt_y = img.shape[0]
 pt_x = img.shape[1]
 for y in range(pt_y-50, pt_y):

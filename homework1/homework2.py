@@ -26,20 +26,17 @@ def reduce_value(two_array: np.ndarray) -> np.ndarray:
     return two_array
 
 
-img = cv2.imread('street.jpg')
-copy_img = img.copy()
-hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-h, s, v = cv2.split(hsv_img)
-cv2.namedWindow('street', cv2.WINDOW_NORMAL)
-cv2.imshow('street', img)
-ret_value = cv2.waitKey(0)
-while ret_value != ord('q'):
-    if ret_value == -1:
-        ret_value = cv2.waitKey(0)
-        continue
+def disa_image(three_array: np.ndarray) -> np.ndarray:
+    three_array = cv2.cvtColor(three_array, cv2.COLOR_BGR2HSV)
+    h, s, v = cv2.split(three_array)
+    return h, s, v
 
+
+def adjust_hsv(img: np.ndarray, ret_value: int) -> np.ndarray:
+    copy_img = img.copy()
+    h, s, v = disa_image(img)
     # 色相(Hue),數值0~179
-    elif ret_value == ord('w'):
+    if ret_value == ord('w'):
         add1_value(h)
     elif ret_value == ord('s'):
         reduce_value(h)
@@ -58,11 +55,26 @@ while ret_value != ord('q'):
 
     # 回復原影像
     elif ret_value == ord('y'):
-        hsv_img = cv2.cvtColor(copy_img, cv2.COLOR_BGR2HSV)
-        h, s, v = cv2.split(hsv_img)
+        h, s, v = disa_image(copy_img)
     merge_img = cv2.merge([h, s, v])
     again_img = cv2.cvtColor(merge_img, cv2.COLOR_HSV2BGR)
-    cv2.imshow('street', again_img)
-    ret_value = cv2.waitKey(0)
+    return again_img
 
-cv2.destroyAllWindows()
+
+def main() -> None:
+    img = cv2.imread('street.jpg')
+    cv2.namedWindow('street', cv2.WINDOW_NORMAL)
+    cv2.imshow('street', img)
+    ret_value = cv2.waitKey(0)
+    while ret_value != ord('q'):
+        if ret_value == -1:
+            ret_value = cv2.waitKey(0)
+            continue
+        img = adjust_hsv(img, ret_value)
+        cv2.imshow('street', img)
+        ret_value = cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+if __name__ == "__main__":
+    main()

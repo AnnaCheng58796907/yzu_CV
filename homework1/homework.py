@@ -3,18 +3,16 @@ import numpy as np
 
 
 def add_value(two_array: np.ndarray, value: int) -> np.ndarray:
-    if np.any(two_array >= (value-4)):
-        two_array.fill(value)
-    else:
-        two_array[:] += 5
+    two_array16 = two_array.astype(np.int16)
+    two_array[:] = np.clip(two_array16 + 5, 0, value)
+    two_array.astype(np.uint8)
     return two_array
 
 
-def reduce_value(two_array: np.ndarray) -> np.ndarray:
-    if np.any(two_array <= 4):
-        two_array.fill(0)
-    else:
-        two_array[:] -= 5
+def reduce_value(two_array: np.ndarray, value: int) -> np.ndarray:
+    two_array16 = two_array.astype(np.int16)
+    two_array[:] = np.clip(two_array16 - 5, 0, value)
+    two_array.astype(np.uint8)
     return two_array
 
 
@@ -35,19 +33,19 @@ def main() -> None:
         elif ret_value == ord('w'):
             add_value(h, 179)
         elif ret_value == ord('s'):
-            reduce_value(h)
+            reduce_value(h, 179)
 
         # 飽和度(Saturation),數值0~255
         elif ret_value == ord('e'):
             add_value(s, 255)
         elif ret_value == ord('d'):
-            reduce_value(s)
+            reduce_value(s, 255)
 
         # 明度(Value),數值0~255
         elif ret_value == ord('r'):
             add_value(v, 255)
         elif ret_value == ord('f'):
-            reduce_value(v)
+            reduce_value(v, 255)
 
         # 回復原影像
         elif ret_value == ord('y'):

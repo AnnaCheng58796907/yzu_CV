@@ -6,7 +6,8 @@ def add_value_with_clip(two_array: np.ndarray, max_val: int) -> np.ndarray:
     """
     將陣列數值增加 5，並使用 np.clip() 確保數值在 [0, max_val] 範圍內。
     """
-    two_array[:] = np.clip(two_array.astype(np.int16) + 5, 0, max_val).astype(np.uint8)
+    two_array[:] = np.clip(two_array.astype(np.int16) + 5, 0, max_val)
+    two_array.astype(np.uint8)
     return two_array
 
 
@@ -14,7 +15,8 @@ def reduce_value_with_clip(two_array: np.ndarray, max_val: int) -> np.ndarray:
     """
     將陣列數值減少 5，並使用 np.clip() 確保數值在 [0, max_val] 範圍內。
     """
-    two_array[:] = np.clip(two_array.astype(np.int16) - 5, 0, max_val).astype(np.uint8)
+    two_array[:] = np.clip(two_array.astype(np.int16) - 5, 0, max_val)
+    two_array.astype(np.uint8)
     return two_array
 
 
@@ -25,10 +27,10 @@ def main() -> None:
         return
 
     original_img = img.copy()
-    
+
     cv2.namedWindow('street', cv2.WINDOW_NORMAL)
     cv2.imshow('street', img)
-    
+
     print("使用鍵盤按鍵調整影像：")
     print("w: 色相+5, s: 色相-5")
     print("e: 飽和度+5, d: 飽和度-5")
@@ -40,11 +42,11 @@ def main() -> None:
     h, s, v = cv2.split(hsv_img)
 
     while True:
-        ret_value = cv2.waitKey(0) & 0xFF
-        
+        ret_value = cv2.waitKey(0)
+
         if ret_value == ord('q'):
             break
-        
+
         # 根據按鍵調整對應的 HSV 通道
         if ret_value == ord('w'):
             h = add_value_with_clip(h, 179)
@@ -64,7 +66,6 @@ def main() -> None:
             h, s, v = cv2.split(hsv_img)
         else:
             continue
-            
         merged_hsv = cv2.merge([h, s, v])
         img = cv2.cvtColor(merged_hsv, cv2.COLOR_HSV2BGR)
         cv2.imshow('street', img)

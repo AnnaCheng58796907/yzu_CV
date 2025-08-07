@@ -4,15 +4,13 @@ import numpy as np
 
 def add_value(two_array: np.ndarray, value: int) -> np.ndarray:
     two_array16 = two_array.astype(np.int16)
-    two_array[:] = np.clip(two_array16 + 5, 0, value)
-    two_array.astype(np.uint8)
+    two_array[:] = np.clip(two_array16 + 5, 0, value).astype(np.uint8)
     return two_array
 
 
 def reduce_value(two_array: np.ndarray, value: int) -> np.ndarray:
     two_array16 = two_array.astype(np.int16)
-    two_array[:] = np.clip(two_array16 - 5, 0, value)
-    two_array.astype(np.uint8)
+    two_array[:] = np.clip(two_array16 - 5, 0, value).astype(np.uint8)
     return two_array
 
 

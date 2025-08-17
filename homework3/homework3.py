@@ -42,8 +42,8 @@ red_K = np.ones_like(red_K) * 0.1
 red_bgr = cmyk_to_bgr(red_C, red_M, red_Y, red_K)
 
 # 青天：CMYK (100%, 80%, 0%, 20%)
-h = red_src.shape[0] // 4
-w = red_src.shape[1] // 4
+h = red_src.shape[0] // 2
+w = red_src.shape[1] // 2
 bg_src = np.ones((h, w, 3), np.uint8) * 255
 bg_C, bg_M, bg_Y, bg_K = bgr_cmyk(bg_src)
 bg_C = np.ones_like(bg_C) * 1.0

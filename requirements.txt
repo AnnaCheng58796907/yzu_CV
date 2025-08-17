@@ -1,4 +1,8 @@
 # yzu_CV Environment Requirements
+"""
+ 主要套件包conda install -c conda-forge opencv
+ pillow安裝方式:conda install -c conda-forge pillow
+"""
 # Usage: pip install -r requirements.txt
 
 opencv=4.12.0

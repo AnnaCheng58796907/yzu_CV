@@ -103,6 +103,6 @@ cv2.circle(bg_src, center_c, wh_cr, bg_color, bg_rw)
 h, w = bg_src.shape[:2]
 red_src[0:h, 0:w] = bg_src
 
-cv2.imshow('cmyk', red_src)
+cv2.imshow('中華民國國徽', red_src)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

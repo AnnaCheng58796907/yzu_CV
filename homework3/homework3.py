@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 
 
-
 def bgr_cmyk(img) -> np.ndarray:
     # bgr轉換cmyk
     bgr_norm = img.astype(float) / 255.0
@@ -94,11 +93,13 @@ for i in range(num_angle):
 
     cv2.fillPoly(bg_src, [pts], white)
 
+
 # 青底圓形
 bg_b, bg_g, bg_r = bg_src[1, 1]
 bg_color = (int(bg_b), int(bg_g), int(bg_r))
 bg_rw = (wh_cr * 2) // 15
-cv2.circle(bg_src, center_c, wh_cr, bg_color, bg_rw)
+bg_cr = wh_cr + (bg_rw // 2)
+cv2.circle(bg_src, center_c, bg_cr, bg_color, bg_rw)
 
 # 國旗合併
 h, w = bg_src.shape[:2]

@@ -3,6 +3,7 @@ import numpy as np
 
 
 def bgr_cmyk(img) -> np.ndarray:
+    # bgr轉換cmyk
     bgr_norm = img.astype(float) / 255.0
 
     # 計算 K 通道
@@ -29,47 +30,79 @@ def cmyk_to_bgr(C, M, Y, K):
     return bgr
 
 
-width = 900
-height = int((width / 3) * 2)
+def end_points(center, length, angle_deg):
+    # 繪製30度尖角
+    angle_rad = np.deg2rad(angle_deg)
+    x = int(center[0] + length * np.cos(angle_rad))
+    y = int(center[1] - length * np.sin(angle_rad))
+    return (x, y)
+
+
+red_w = 900
+red_h = int((red_w * 2) / 3)
 
 # 紅地：CMYK (0%, 100%, 100%, 10%)
-red_src = np.ones((height, width, 3), np.uint8) * 255
-red_C, red_M, red_Y, red_K = bgr_cmyk(red_src)
-red_C = np.zeros_like(red_C) * 0.0
-red_M = np.ones_like(red_M) * 1.0
-red_Y = np.ones_like(red_Y) * 1.0
-red_K = np.ones_like(red_K) * 0.1
-red_bgr = cmyk_to_bgr(red_C, red_M, red_Y, red_K)
+red_src = np.ones((red_h, red_w, 3), np.uint8) * 255
+C, M, Y, K = bgr_cmyk(red_src)
+red_C = np.zeros_like(C) * 0.0
+red_M = np.ones_like(M) * 1.0
+red_Y = np.ones_like(Y) * 1.0
+red_K = np.ones_like(K) * 0.1
+red_src = cmyk_to_bgr(red_C, red_M, red_Y, red_K)
 
 # 青天：CMYK (100%, 80%, 0%, 20%)
-h = red_src.shape[0] // 2
-w = red_src.shape[1] // 2
-bg_src = np.ones((h, w, 3), np.uint8) * 255
-bg_C, bg_M, bg_Y, bg_K = bgr_cmyk(bg_src)
-bg_C = np.ones_like(bg_C) * 1.0
-bg_M = np.ones_like(bg_M) * 0.8
-bg_Y = np.zeros_like(bg_Y) * 0.0
-bg_K = np.ones_like(bg_K) * 0.2
-bg_bgr = cmyk_to_bgr(bg_C, bg_M, bg_Y, bg_K)
-bg = (bg_bgr[1:1])
-src = np.zeros((h, w, 3), np.uint8) * 255
+bg_C = np.ones_like(C) * 1.0
+bg_M = np.ones_like(M) * 0.8
+bg_Y = np.zeros_like(Y) * 0.0
+bg_K = np.ones_like(K) * 0.2
+bg_src = cmyk_to_bgr(bg_C, bg_M, bg_Y, bg_K)
+bg_src = cv2.resize(bg_src, None, fx=0.5, fy=0.5)
+
 
 # 白日：正白色
 cy = bg_src.shape[0] // 2
 cx = bg_src.shape[1] // 2
+center_c = (cx, cy)
 white = (255, 255, 255)
 wh_cr = bg_src.shape[1] // 8
 bg_cr = wh_cr * 3
-cv2.circle(src, (cx, cy), bg_cr, bg, -1)
-cv2.circle(src, (cx, cy), wh_cr, white, -1)
+cv2.circle(bg_src, center_c, wh_cr, white, -1)
 
-# w_C, bg_M, bg_Y, bg_K = bgr_cmyk(bg_src)
-# bg_C = np.ones_like(bg_C) * 1.0
-# bg_M = np.ones_like(bg_M) * 0.8
-# bg_Y = np.zeros_like(bg_Y) * 0.0
-# bg_K = np.ones_like(bg_K) * 0.2
-# bg_bgr = cmyk_to_bgr(bg_C, bg_M, bg_Y, bg_K)
 
-cv2.imshow('cmyk', src)
+# 12道光芒
+length = wh_cr * 2
+angle_deg = 30 // 2
+
+num_angle = 12
+angle_step = 360 // num_angle
+
+# 旋轉繪製12道光芒
+for i in range(num_angle):
+    ba_an = i * angle_step
+    # 第1頂點
+    firs_point = end_points(center_c, length, ba_an)
+
+    end1_angle = ba_an + 180 - angle_deg
+    end2_angle = ba_an + 180 + angle_deg
+
+    pts1 = end_points(firs_point, length, end1_angle)
+    pts2 = end_points(firs_point, length, end2_angle)
+
+    pts = np.array([firs_point, pts1, pts2], dtype=np.int32)
+    pts = pts.reshape(-1, 1, 2)
+
+    cv2.fillPoly(bg_src, [pts], white)
+
+# 青底圓形
+bg_b, bg_g, bg_r = bg_src[1, 1]
+bg_color = (int(bg_b), int(bg_g), int(bg_r))
+bg_rw = (wh_cr * 2) // 15
+cv2.circle(bg_src, center_c, wh_cr, bg_color, bg_rw)
+
+# 國旗合併
+h, w = bg_src.shape[:2]
+red_src[0:h, 0:w] = bg_src
+
+cv2.imshow('cmyk', red_src)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

@@ -42,7 +42,7 @@ red_w = 900
 red_h = int((red_w * 2) / 3)
 
 # 紅地：CMYK (0%, 100%, 100%, 10%)
-red_src = np.ones((red_h, red_w, 3), np.uint8) * 255
+red_src = np.ones((red_h, red_w, 4), np.uint8) * 255
 C, M, Y, K = bgr_cmyk(red_src)
 red_C = np.zeros_like(C) * 0.0
 red_M = np.ones_like(M) * 1.0

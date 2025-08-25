@@ -43,9 +43,6 @@ def mask_contours(src1):
             sorted_points[1] = box[np.argmin(d)]  # 差值最小的是左下角
             sorted_points[3] = box[np.argmax(d)]  # 差值最大的是右上角
 
-            # 注意：上面的排序邏輯可能會因圖像和角度而有小幅變動，另一種更可靠的排序方式是
-            # 根據頂點和中心點的角度進行排序。但對於大多數情況，這個方法足夠了。
-
         else:
             print("簡化後的輪廓不是一個四邊形。請嘗試調整 epsilon。")
     else:

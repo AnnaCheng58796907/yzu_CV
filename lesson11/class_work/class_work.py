@@ -11,7 +11,7 @@ def hu_moment(src):
     _, dst_binary = cv2.threshold(src_gray, 127, 255,
                                   cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     contours, _ = cv2.findContours(dst_binary,
-                                   cv2.RETR_LIST,
+                                   cv2.RETR_EXTERNAL,
                                    cv2.CHAIN_APPROX_SIMPLE)
     # 創建一個空列表，用於儲存所有輪廓的面積
     areas = []
@@ -53,12 +53,12 @@ n = len(contours1)
 for i in range(n):
     cv2.putText(src1, str(i), contours1[i][0][0], font, 1, (0, 0, 255), 2)
 cv2.imshow("result", src1)
-# 輪廓匹配
+# 輪廓匹配,matchShapes 的值越小越相似
 for j in range(n):
-    match = cv2.matchShapes(contours[0], contours1[j], 3, 0.0)
+    match = cv2.matchShapes(contours[0], contours1[j], 1, 0.0)
     print(f"輪廓{j}相比對結果為 = {match}")
-    if match >= 0.3:
-        dst = cv2.drawContours(src1, contours1[j], -1, (0, 255, 0), -1)
+    if match <= 0.2:
+        dst = cv2.drawContours(src1, [contours1[j]], -1, (0, 255, 0), -1)
         cv2.imshow("result", dst)
         print(match)
     else:

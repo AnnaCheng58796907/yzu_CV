@@ -11,8 +11,10 @@ def choose_image_path(default_path="lena.jpg"):
         from tkinter import filedialog
         root = tk.Tk()
         root.withdraw()
-        path = filedialog.askopenfilename(title="選擇影像",
-                                          filetypes=[("Images", "*.jpg *.jpeg *.png *.bmp *.tif *.tiff"), ("All files", "*.*")])
+        path = filedialog.askopenfilename(
+            title="選擇影像",
+            filetypes=[("Images", "*.jpg *.jpeg *.png *.bmp *.tif *.tiff"),
+                       ("All files", "*.*")])
         root.destroy()
         if path:
             return path
@@ -149,11 +151,12 @@ class GrabCutGUI:
 
             # 右側顯示分割結果（併排）
             combined = np.zeros(
-                (max(vis.shape[0], self.output.shape[0]), vis.shape[1] + self.output.shape[1], 3), dtype=np.uint8)
-            combined[:vis.shape[0], :vis.shape[1]] = vis
-            combined[:self.output.shape[0], vis.shape[1]
-                :vis.shape[1]+self.output.shape[1]] = self.output
-
+                (max(vis.shape[0], self.output.shape[0]),
+                 vis.shape[1] + self.output.shape[1], 3),
+                dtype=np.uint8)
+            combined[:vis.shape[0], :vis.shape[1]] = vis # noqa: E501
+            combined[:self.output.shape[0], \
+                     vis.shape[1]:vis.shape[1]+self.output.shape[1]] = self.output # noqa: E501
             cv2.imshow(self.win, combined)
             k = cv2.waitKey(20) & 0xFF
 

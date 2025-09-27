@@ -124,12 +124,13 @@ class GrabCutGUI:
 
     def overlay_help(self, canvas):
         help_texts = [
-            "Mouse: Left-drag = paint (current brush), Right-drag = draw rectangle",
+            "Mouse:Left-drag=paint (current brush), Right-drag=draw rectangle",
             "Keys: 0=BG  1=FG  2=Prob. BG  3=Prob. FG",
-            "      g=Run GrabCut  n=Next iter  r=Reset  s=Save  +/-=Brush size",
-            "      q=Quit"
-            f"Brush mode: {labels_name[self.mode]}   Radius: {self.brush_radius}"
+            "      g=Run GrabCut n=Next iter r=Reset s=Save  +/-=Brush size",
+            "      q=Quit",
+            f"Brush mode:{labels_name[self.mode]} Radius:{self.brush_radius}"
         ]
+
         overlay = canvas.copy()
         y = 20
         line_h = 22
@@ -154,10 +155,10 @@ class GrabCutGUI:
                 (max(vis.shape[0], self.output.shape[0]),
                  vis.shape[1] + self.output.shape[1], 3),
                 dtype=np.uint8)
-            combined[:vis.shape[0], :vis.shape[1]] = vis # noqa: E501
-            combined[:self.output.shape[0], \
-                     vis.shape[1]:vis.shape[1]+self.output.shape[1]] = self.output # noqa: E501
-            cv2.imshow(self.win, combined)
+            combined[:vis.shape[0], :vis.shape[1]] = vis
+            combined[:self.output.shape[0],
+                     vis.shape[1]:
+                     vis.shape[1]+self.output.shape[1]] = self.output
             k = cv2.waitKey(20) & 0xFF
 
             if k == 27 or k == ord('q'):

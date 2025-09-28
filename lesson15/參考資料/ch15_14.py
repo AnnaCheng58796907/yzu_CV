@@ -1,0 +1,13 @@
+import cv2
+
+capture = cv2.VideoCapture(0)                   # 初始化攝影功能
+capture.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)     # 設定寬度
+capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 960)     # 設定高度
+while (capture.isOpened()):
+    ret, frame = capture.read()                 # 讀取攝影機的影像
+    cv2.imshow('Frame', frame)                  # 顯示攝影機的影像
+    c = cv2.waitKey(1)                          # 等待時間 1 毫秒
+    if c == 27:                                 # 若按 Esc 鍵, 結束
+        break
+capture.release()                               # 關閉攝影功能
+cv2.destroyAllWindows()

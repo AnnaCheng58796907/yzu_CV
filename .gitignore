@@ -6,3 +6,6 @@
 /參考資料/
 *.jpg
 *.png
+/models/
+/images/
+/cvzone3d/
